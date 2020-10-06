@@ -22,3 +22,17 @@ func PrintEncodedLine(last []string, n int) {
 		num = 1
 	}
 }
+
+// PrintDecodedLine prints out our decoded message
+func PrintDecodedLine(first []string, next []int, sum, index int) {
+	var decodedString []string
+
+	decodedString[0] = string(first[index])
+	fmt.Print(decodedString[0])
+
+	for i := 1; i < sum; i++ {
+		index = next[index]
+		decodedString[i] = string(first[index])
+		fmt.Print(decodedString[i])
+	}
+}
