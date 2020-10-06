@@ -1,45 +1,66 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"log"
+	"os"
 )
 
 func main() {
-	str := "Mississippi"
-	original := str
-	n := len(str)
-	str2 := make([]string, n)
+	scanner := bufio.NewScanner(os.Stdin)
+	var str string
+	lines := 0
+	for scanner.Scan() {
+		str = scanner.Text()
+		if len(str) > 0 {
+			if lines != 0 {
+				fmt.Println()
+			} else {
+				lines++
+			}
+			original := str
+			n := len(str)
+			str2 := make([]string, n)
 
-	for i := 0; i < n; i++ {
-		a := []rune(str)
-		str = string(a[1:]) + string(a[0])
-		str2[i] = str
-	}
+			for i := 0; i < n; i++ {
+				a := []rune(str)
+				str = string(a[1:]) + string(a[0])
+				str2[i] = str
+			}
 
-	fmt.Println("\n--- Unsorted --- \n\n", str2)
-	insertionSort(&str2, n) // Pass the address of our string array
+			insertionSort(&str2, n) // Pass the address of our string array
 
-	var originalLocation int
-	last := make([]string, n)
+			var originalLocation int
+			last := make([]string, n)
 
-	for i := 0; i < n; i++ {
-		current := str2[i]
+			for i := 0; i < n; i++ {
+				current := str2[i]
 
-		last[i] = string(current[(n - 1)])
+				last[i] = string(current[(n - 1)])
 
-		if str2[i] == original {
-			originalLocation = i
+				if str2[i] == original {
+					originalLocation = i
+				}
+			}
+			fmt.Println(originalLocation)
+			printEncodedLine(last, n)
+		} else {
+			fmt.Println()
 		}
 	}
-	fmt.Println(originalLocation)
-	printEncodedLine(last, n)
-	fmt.Println("\n--- Sorted ---\n\n", str2)
+
+	if scanner.Err() != nil {
+		log.Fatal(scanner.Err())
+	}
+
 }
 
 func printEncodedLine(last []string, n int) {
 	num := 1
 
 	for i := 0; i < n; i++ {
+		// The first conditional is to make sure we dont go out of index range for last[i+1]
 		if i+1 != n && last[i] == last[i+1] {
 			num++
 			continue
