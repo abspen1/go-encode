@@ -7,11 +7,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/abspen1/go-encode/output"
-	"github.com/abspen1/go-encode/sort"
+	"github.com/abspen1/go-encode/encode"
 )
 
 func main() {
+	arg := os.Args[1]
 	scanner := bufio.NewScanner(os.Stdin)
 	var str string
 	lines := 0
@@ -24,32 +24,7 @@ func main() {
 			} else {
 				lines++
 			}
-			original := str
-			n := len(str)
-			str2 := make([]string, n)
-
-			for i := 0; i < n; i++ {
-				a := []rune(str)
-				str = string(a[1:]) + string(a[0])
-				str2[i] = str
-			}
-
-			sort.InsertionSort(&str2, n) // Pass the address of our string array
-
-			var originalLocation int
-			last := make([]string, n)
-
-			for i := 0; i < n; i++ {
-				current := str2[i]
-
-				last[i] = string(current[(n - 1)])
-
-				if str2[i] == original {
-					originalLocation = i
-				}
-			}
-			fmt.Println(originalLocation)
-			output.PrintEncodedLine(last, n)
+			encode.Run(str, arg)
 		} else {
 			fmt.Println()
 		}
