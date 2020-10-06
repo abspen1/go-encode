@@ -5,12 +5,17 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
+
+	"github.com/abspen1/go-encode/output"
+	"github.com/abspen1/go-encode/sort"
 )
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	var str string
 	lines := 0
+	start := time.Now()
 	for scanner.Scan() {
 		str = scanner.Text()
 		if len(str) > 0 {
@@ -29,7 +34,7 @@ func main() {
 				str2[i] = str
 			}
 
-			insertionSort(&str2, n) // Pass the address of our string array
+			sort.InsertionSort(&str2, n) // Pass the address of our string array
 
 			var originalLocation int
 			last := make([]string, n)
@@ -44,7 +49,7 @@ func main() {
 				}
 			}
 			fmt.Println(originalLocation)
-			printEncodedLine(last, n)
+			output.PrintEncodedLine(last, n)
 		} else {
 			fmt.Println()
 		}
@@ -53,39 +58,6 @@ func main() {
 	if scanner.Err() != nil {
 		log.Fatal(scanner.Err())
 	}
-
-}
-
-func printEncodedLine(last []string, n int) {
-	num := 1
-
-	for i := 0; i < n; i++ {
-		// The first conditional is to make sure we dont go out of index range for last[i+1]
-		if i+1 != n && last[i] == last[i+1] {
-			num++
-			continue
-		}
-
-		fmt.Print(num, " ", last[i])
-
-		if i != (n - 1) {
-			fmt.Print(" ")
-		}
-
-		num = 1
-	}
-}
-
-func insertionSort(items *[]string, n int) {
-	var x int
-
-	for i := 1; i < n; i++ {
-		key := string((*items)[i])
-		x = i - 1
-		for x >= 0 && string((*items)[x]) > key {
-			(*items)[x+1] = (*items)[x]
-			x = x - 1
-		}
-		(*items)[x+1] = key
-	}
+	elapsed := time.Since(start)
+	log.Printf("Binomial took %s", elapsed)
 }
