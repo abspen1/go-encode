@@ -1,9 +1,13 @@
 package output
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
-// PrintEncodedLine prints out our encoded message
-func PrintEncodedLine(last []string, n int) {
+// PrintEncodedLine prints out our encoded message (trucated)
+func PrintEncodedLine(last []string, n int) string {
+	var str string
 	num := 1
 
 	for i := 0; i < n; i++ {
@@ -14,13 +18,15 @@ func PrintEncodedLine(last []string, n int) {
 		}
 
 		fmt.Print(num, " ", last[i])
-
+		str += strconv.Itoa(num) + " " + last[i]
 		if i != (n - 1) {
 			fmt.Print(" ")
+			str += " "
 		}
 
 		num = 1
 	}
+	return str
 }
 
 // PrintDecodedLine prints out our decoded message
